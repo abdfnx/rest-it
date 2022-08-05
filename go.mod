@@ -23,9 +23,9 @@ require (
 	github.com/sergi/go-diff v1.2.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/pflag v1.0.5
-	github.com/tidwall/gjson v1.14.1
+	github.com/tidwall/gjson v1.14.2
 	github.com/tidwall/pretty v1.2.0
-	github.com/tidwall/sjson v1.2.4
+	github.com/tidwall/sjson v1.2.5
 	github.com/yosssi/gohtml v0.0.0-20201013000340-ee4748c638f4
 	github.com/zyedidia/micro v1.4.1
 	golang.org/x/sys v0.0.0-20220422013727-9388b58f7150
