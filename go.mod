@@ -12,7 +12,7 @@ require (
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/jedib0t/go-pretty/v6 v6.3.6
 	github.com/mattn/go-colorable v0.1.12
-	github.com/mattn/go-isatty v0.0.14
+	github.com/mattn/go-isatty v0.0.16
 	github.com/mattn/go-runewidth v0.0.13
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/mitchellh/go-homedir v1.1.0
@@ -28,7 +28,7 @@ require (
 	github.com/tidwall/sjson v1.2.5
 	github.com/yosssi/gohtml v0.0.0-20201013000340-ee4748c638f4
 	github.com/zyedidia/micro v1.4.1
-	golang.org/x/sys v0.0.0-20220422013727-9388b58f7150
+	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
 )
 
