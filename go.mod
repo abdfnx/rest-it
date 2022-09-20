@@ -13,7 +13,7 @@ require (
 	github.com/jedib0t/go-pretty/v6 v6.3.8
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mattn/go-isatty v0.0.16
-	github.com/mattn/go-runewidth v0.0.13
+	github.com/mattn/go-runewidth v0.0.14
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/muesli/reflow v0.3.0
