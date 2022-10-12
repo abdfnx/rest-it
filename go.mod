@@ -21,7 +21,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rivo/tview v0.0.0-20211202162923-2a6de950f73b
 	github.com/sergi/go-diff v1.2.0
-	github.com/spf13/cobra v1.5.0
+	github.com/spf13/cobra v1.6.0
 	github.com/spf13/pflag v1.0.5
 	github.com/tidwall/gjson v1.14.3
 	github.com/tidwall/pretty v1.2.1
@@ -36,7 +36,7 @@ require (
 	github.com/aymanbagabas/go-osc52 v1.0.3 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/gdamore/encoding v1.0.0 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
