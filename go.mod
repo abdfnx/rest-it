@@ -28,8 +28,8 @@ require (
 	github.com/tidwall/sjson v1.2.5
 	github.com/yosssi/gohtml v0.0.0-20201013000340-ee4748c638f4
 	github.com/zyedidia/micro v1.4.1
-	golang.org/x/sys v0.3.0
-	golang.org/x/term v0.3.0
+	golang.org/x/sys v0.4.0
+	golang.org/x/term v0.4.0
 )
 
 require (
