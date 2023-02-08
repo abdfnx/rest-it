@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.17
 
 # install go
 COPY --from=golang:1.17-alpine /usr/local/go/ /usr/local/go/
