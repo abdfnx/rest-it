@@ -14,7 +14,7 @@
   "dependencies": {
     "execa": "^7.1.1",
     "mkdirp": "^2.1.5",
-    "rimraf": "^4.4.0",
+    "rimraf": "^4.4.1",
     "shelljs": "^0.8.5"
   }
 }
