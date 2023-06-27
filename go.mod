@@ -17,7 +17,7 @@ require (
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/muesli/reflow v0.3.0
-	github.com/muesli/termenv v0.15.1
+	github.com/muesli/termenv v0.15.2
 	github.com/pkg/errors v0.9.1
 	github.com/rivo/tview v0.0.0-20211202162923-2a6de950f73b
 	github.com/sergi/go-diff v1.3.1
