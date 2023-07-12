@@ -230,12 +230,12 @@ func run(opts *options.RunCommandOptions) error {
 				readFrom = os.Getenv(readFrom)
 			}
 
-			data, err = ioutil.ReadFile(readFrom)
+			body, err := ioutil.ReadFile(readFrom)
 			if err != nil {
 				return err
 			}
 
-			content = string(data)
+			content = string(body)
 		}
 
 		if !openBodyEditor && readFrom == "" {
