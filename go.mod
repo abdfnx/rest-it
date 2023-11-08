@@ -29,7 +29,7 @@ require (
 	github.com/yosssi/gohtml v0.0.0-20201013000340-ee4748c638f4
 	github.com/zyedidia/micro v1.4.1
 	golang.org/x/sys v0.14.0
-	golang.org/x/term v0.13.0
+	golang.org/x/term v0.14.0
 )
 
 require (
