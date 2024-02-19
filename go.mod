@@ -8,7 +8,7 @@ require (
 	github.com/abdfnx/looker v0.1.0
 	github.com/atotto/clipboard v0.1.4
 	github.com/briandowns/spinner v1.23.0
-	github.com/gdamore/tcell/v2 v2.7.0
+	github.com/gdamore/tcell/v2 v2.7.1
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/jedib0t/go-pretty/v6 v6.5.4
 	github.com/mattn/go-colorable v0.1.13
