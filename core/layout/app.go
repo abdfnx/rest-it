@@ -598,7 +598,6 @@ func Layout(version string) {
 						}
 					} else if authForm.HasFocus(){
 						if (authForm.GetButton(authForm.GetButtonCount() - 1).HasFocus()){
-							// have to check if there is a form item else transfer it to button
 							if headersForm.GetFormItemCount() == 0{
 								app.SetFocus(headersForm.GetButton(0))
 							}else{
@@ -713,11 +712,3 @@ func Layout(version string) {
 		}
 	}
 }
-
-// AddItem(requestForm, 0, 1, false).
-// AddItem(authForm, 20, 1, false).
-// AddItem(headersForm, 15, 1, false), 0, 1, false).
-// AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
-// 	AddItem(responseView, 0, 3, false).
-// 	AddItem(statusView, 7, 1, false), 0, 2, false).
-// AddItem(tview.NewBox().SetBorder(true), 0, 0, false)
