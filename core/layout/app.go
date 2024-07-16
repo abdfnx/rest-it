@@ -70,6 +70,10 @@ func Layout(version string) {
 			- Ctrl+S: Save Request Body
 			- Ctrl+U: Update Your Resto
 			- Ctrl+Q: Quit
+			- Ctrl+J: To Move Down
+			- Ctrl+K: To Move Up
+			- Ctrl+L: To Move Right
+			- Ctrl+H: To Move Left
 	`
 
 	update := `
