@@ -594,7 +594,12 @@ func Layout(version string) {
 						}
 					} else if authForm.HasFocus(){
 						if (authForm.GetButton(authForm.GetButtonCount() - 1).HasFocus()){
-							app.SetFocus(headersForm.GetButton(0))
+							// have to check if there is a form item else transfer it to button
+							if headersForm.GetFormItemCount() == 0{
+								app.SetFocus(headersForm.GetButton(0))
+							}else{
+								app.SetFocus(headersForm.GetFormItem(0))
+							}
 						}else{
 							fII, bII := authForm.GetFocusedItemIndex()
 							if bII == -1 && fII != authForm.GetFormItemCount() - 1{
@@ -609,6 +614,8 @@ func Layout(version string) {
 							app.SetFocus(requestForm.GetFormItem(0))
 						}else if fII == -1 || bII != headersForm.GetFormItemCount() - 1{
 							app.SetFocus(headersForm.GetButton(bII+1))
+						}else if bII == -1 {
+							app.SetFocus(headersForm.GetButton(0))
 						}
 					} else if statusView.HasFocus(){
 						app.SetFocus(responseView)
@@ -620,10 +627,15 @@ func Layout(version string) {
 				case tcell.KeyCtrlK:
 					if headersForm.HasFocus(){
 						fII, bII := headersForm.GetFocusedItemIndex()
-						if headersForm.GetButton(0).HasFocus(){
+						formItemCount := headersForm.GetFormItemCount()
+						if formItemCount != 0 && fII == 0{
 							app.SetFocus(authForm.GetButton(authForm.GetButtonCount() - 1))
-						}else if fII == -1 || bII != 0{
-							app.SetFocus(headersForm.GetButton(bII-1))
+						}else if headersForm.GetButton(0).HasFocus() &&  formItemCount != 0{
+							app.SetFocus(headersForm.GetFormItem(formItemCount - 1))
+						}else if headersForm.GetButton(0).HasFocus() && formItemCount == 0{
+							app.SetFocus(authForm.GetButton(authForm.GetButtonCount() - 1))
+						} else if fII == -1 {
+							app.SetFocus(headersForm.GetButton(bII - 1))
 						}
 					} else if authForm.HasFocus(){
 						fII, bII := authForm.GetFocusedItemIndex()
