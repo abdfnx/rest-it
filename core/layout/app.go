@@ -1,41 +1,41 @@
 package layout
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"log"
-	"encoding/json"
+	"os"
 
-	"github.com/abdfnx/resto/tools"
 	"github.com/abdfnx/resto/core/api"
 	"github.com/abdfnx/resto/core/editor"
 	"github.com/abdfnx/resto/core/editor/runtime"
+	"github.com/abdfnx/resto/tools"
 
 	tcell "github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
-	"github.com/tidwall/pretty"
 	"github.com/tidwall/gjson"
+	"github.com/tidwall/pretty"
 )
 
 var (
 	// request
-	method          string
-	httpURL         string
-	cType           string
-	fn              string = tools.RequestFile()
+	method  string
+	httpURL string
+	cType   string
+	fn      string = tools.RequestFile()
 
 	// respone
-	body    	    string
-	respone 	    string
-	status  	    string
+	body    string
+	respone string
+	status  string
 
 	// auth
-	authType 	    string
-	requestHeaders  string
+	authType       string
+	requestHeaders string
 
 	// headers
-	headersCount    int = 0
+	headersCount int = 0
 )
 
 func Layout(version string) {
@@ -65,7 +65,7 @@ func Layout(version string) {
 
 		Shortcuts:
 			- Ctrl+P: Open Resto Panel
-			- Ctrl+H: Open Help Guide
+			- Ctrl+W: Open Help Guide
 			- Ctrl+E: Open Settings
 			- Ctrl+S: Save Request Body
 			- Ctrl+U: Update Your Resto
@@ -90,14 +90,14 @@ func Layout(version string) {
 		SetColumns(30, 0, 30).
 		SetRows(3, 0, 3).
 		AddItem(helpText, 1, 1, 1, 1, 0, 0, true), true).
-	ShowPage("main")
+		ShowPage("main")
 
 	updatePage.AddAndSwitchToPage("update", tview.NewGrid().
 		SetRows(3, 0, 3).
 		SetColumns(30, 0, 30).
 		SetBorders(true).
 		AddItem(updateText, 1, 1, 1, 1, 0, 0, false), true).
-	ShowPage("main")
+		ShowPage("main")
 
 	// forms
 	authForm := tview.NewForm()
@@ -109,7 +109,7 @@ func Layout(version string) {
 		SetLabel("URL").
 		SetFieldWidth(32).
 		SetPlaceholder("URL")
-	
+
 	requestMethods := tview.NewDropDown().
 		SetLabel("Request Method").
 		SetOptions([]string{
@@ -171,10 +171,10 @@ func Layout(version string) {
 	bodyEditor.SetColorscheme(colorscheme)
 	bodyEditor.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
-			case tcell.KeyCtrlS:
-				tools.SaveBuffer(buffer, fn)
-				app.SetRoot(flex, true).SetFocus(requestForm)
-				return nil
+		case tcell.KeyCtrlS:
+			tools.SaveBuffer(buffer, fn)
+			app.SetRoot(flex, true).SetFocus(requestForm)
+			return nil
 		}
 
 		return event
@@ -185,10 +185,10 @@ func Layout(version string) {
 	settingsEditor.SetColorscheme(colorscheme)
 	settingsEditor.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
-			case tcell.KeyCtrlS:
-				tools.SaveBuffer(bufferSettings, tools.SettingsFile())
-				app.SetRoot(flex, true).SetFocus(requestForm)
-				return nil
+		case tcell.KeyCtrlS:
+			tools.SaveBuffer(bufferSettings, tools.SettingsFile())
+			app.SetRoot(flex, true).SetFocus(requestForm)
+			return nil
 		}
 
 		return event
@@ -215,7 +215,7 @@ func Layout(version string) {
 	// auth inputs
 	token := tview.NewInputField().
 		SetLabel("Token").
-		SetFieldWidth(20) 
+		SetFieldWidth(20)
 
 	username := tview.NewInputField().
 		SetLabel("Username").
@@ -230,11 +230,11 @@ func Layout(version string) {
 		AddItem(authForm, 20, 1, false).
 		AddItem(headersForm, 15, 1, false), 0, 1, false).
 		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
-		AddItem(responseView, 0, 3, false).
-		AddItem(statusView, 7, 1, false), 0, 2, false).
+			AddItem(responseView, 0, 3, false).
+			AddItem(statusView, 7, 1, false), 0, 2, false).
 		AddItem(tview.NewBox().SetBorder(true), 0, 0, false)
 
-	var Input = func(text, label string, width int, formToReturn *tview.Form, doneFunc func(text string)) {
+	Input := func(text, label string, width int, formToReturn *tview.Form, doneFunc func(text string)) {
 		fileNameInput := tview.NewPages()
 
 		input := tview.NewInputField().SetText(text)
@@ -252,7 +252,7 @@ func Layout(version string) {
 			SetColumns(0, 0, 0).
 			SetRows(0, 3, 0).
 			AddItem(input, 1, 1, 1, 1, 0, 0, true), true).ShowPage("main")
-		
+
 		app.SetRoot(fileNameInput, true).SetFocus(input)
 	}
 
@@ -273,8 +273,8 @@ func Layout(version string) {
 			app.SetRoot(flex, true).SetFocus(headersForm)
 		})
 	})
-	
-	var send = func() {
+
+	send := func() {
 		responseView.Clear()
 		statusView.Clear()
 
@@ -289,7 +289,6 @@ func Layout(version string) {
 		defer b.Close()
 
 		currentBody, err := ioutil.ReadAll(b)
-
 		if err != nil {
 			panic(err)
 		}
@@ -303,35 +302,33 @@ func Layout(version string) {
 		}
 
 		if method == "POST" || method == "PUT" || method == "PATCH" || method == "DELETE" {
-			respone, status, requestHeaders, _ =
-				api.BasicRequestWithBody(
-					httpURL,
-					method,
-					cType,
-					body,
-					authType,
-					token.GetText(),
-					username.GetText(),
-					password.GetText(),
-					false,
-					headersCount,
-					headersForm,
-				)
+			respone, status, requestHeaders, _ = api.BasicRequestWithBody(
+				httpURL,
+				method,
+				cType,
+				body,
+				authType,
+				token.GetText(),
+				username.GetText(),
+				password.GetText(),
+				false,
+				headersCount,
+				headersForm,
+			)
 		} else {
 			body = ""
 
-			respone, status, requestHeaders, _ =
-				api.BasicGet(
-					httpURL,
-					method,
-					authType,
-					token.GetText(),
-					username.GetText(),
-					password.GetText(),
-					false,
-					headersCount,
-					headersForm,
-				)
+			respone, status, requestHeaders, _ = api.BasicGet(
+				httpURL,
+				method,
+				authType,
+				token.GetText(),
+				username.GetText(),
+				password.GetText(),
+				false,
+				headersCount,
+				headersForm,
+			)
 		}
 
 		headers.Clear()
@@ -387,43 +384,42 @@ func Layout(version string) {
 		}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 			switch buttonLabel {
-				case "Request Form":
+			case "Request Form":
+				app.SetRoot(flex, true).SetFocus(requestForm)
+
+			case "Send Request":
+				send()
+				app.SetRoot(flex, true).SetFocus(requestForm)
+
+			case "Body":
+				app.SetRoot(bodyEditor, true).SetFocus(bodyEditor)
+
+			case "Headers":
+				app.SetRoot(flex, true).SetFocus(headersForm)
+
+			case "Authorization":
+				app.SetRoot(flex, true).SetFocus(authForm)
+
+			case "Show Response Headers":
+				app.SetRoot(headers, true).SetFocus(headers)
+
+			case "Save Response in File":
+				data := []byte(respone)
+
+				Input("response.json", "file name", 5, requestForm, func(fn string) {
+					err := os.WriteFile(fn, data, 0644)
+					if err != nil {
+						panic(err)
+					}
+
 					app.SetRoot(flex, true).SetFocus(requestForm)
+				})
 
-				case "Send Request":
-					send()
-					app.SetRoot(flex, true).SetFocus(requestForm)
+			case "Return":
+				app.SetRoot(flex, true).SetFocus(requestForm)
 
-				case "Body":
-					app.SetRoot(bodyEditor, true).SetFocus(bodyEditor)
-
-				case "Headers":
-					app.SetRoot(flex, true).SetFocus(headersForm)
-				
-				case "Authorization":
-					app.SetRoot(flex, true).SetFocus(authForm)
-
-				case "Show Response Headers":
-					app.SetRoot(headers, true).SetFocus(headers)
-				
-				case "Save Response in File":
-					data := []byte(respone)
-
-					Input("response.json", "file name", 5, requestForm, func(fn string) {
-						err := os.WriteFile(fn, data, 0644)
-
-						if err != nil {
-							panic(err)
-						}
-
-						app.SetRoot(flex, true).SetFocus(requestForm)
-					})
-				
-				case "Return":
-					app.SetRoot(flex, true).SetFocus(requestForm)
-				
-				case "Quit From App":
-					app.Stop()
+			case "Quit From App":
+				app.Stop()
 			}
 		})
 
@@ -463,7 +459,6 @@ func Layout(version string) {
 
 			if tokenIndex != -1 {
 				authForm.RemoveFormItem(authForm.GetFormItemIndex("Token"))
-
 			}
 
 			token.SetText("")
@@ -526,30 +521,29 @@ func Layout(version string) {
 			Sync().
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				switch event.Key() {
-					case tcell.KeyCtrlP:
-						app.SetRoot(panelModal, true).SetFocus(panelModal)
-						return nil
+				case tcell.KeyCtrlP:
+					app.SetRoot(panelModal, true).SetFocus(panelModal)
+					return nil
 
-					case tcell.KeyCtrlH:
-						app.SetRoot(helpPage, true).SetFocus(helpPage)
-						return nil
+				case tcell.KeyCtrlH:
+					app.SetRoot(helpPage, true).SetFocus(helpPage)
+					return nil
 
-					case tcell.KeyCtrlU:
-						app.SetRoot(newReleaseModal, true).SetFocus(newReleaseModal)
+				case tcell.KeyCtrlU:
+					app.SetRoot(newReleaseModal, true).SetFocus(newReleaseModal)
 
-					case tcell.KeyCtrlE:
-						app.SetRoot(settingsEditor, true).SetFocus(settingsEditor)
-						return nil
+				case tcell.KeyCtrlE:
+					app.SetRoot(settingsEditor, true).SetFocus(settingsEditor)
+					return nil
 
-					case tcell.KeyCtrlQ:
-						app.Stop()
-						return nil
+				case tcell.KeyCtrlQ:
+					app.Stop()
+					return nil
 				}
 
 				return event
 			}).
-			Run();
-		err != nil {
+			Run(); err != nil {
 			panic(err)
 		}
 	} else {
@@ -567,31 +561,147 @@ func Layout(version string) {
 			Sync().
 			SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 				switch event.Key() {
-					case tcell.KeyCtrlP:
-						app.SetRoot(panelModal, true).SetFocus(panelModal)
-						return nil
+				case tcell.KeyCtrlP:
+					app.SetRoot(panelModal, true).SetFocus(panelModal)
+					return nil
 
-					case tcell.KeyCtrlH:
-						app.SetRoot(helpPage, true).SetFocus(helpPage)
-						return nil
+				case tcell.KeyCtrlW:
+					app.SetRoot(helpPage, true).SetFocus(helpPage)
+					return nil
 
-					case tcell.KeyCtrlU:
-						app.SetRoot(newReleaseModal, true).SetFocus(newReleaseModal)
+				case tcell.KeyCtrlU:
+					app.SetRoot(newReleaseModal, true).SetFocus(newReleaseModal)
 
-					case tcell.KeyCtrlE:
-						app.SetRoot(settingsEditor, true).SetFocus(settingsEditor)
-						return nil
+				case tcell.KeyCtrlE:
+					app.SetRoot(settingsEditor, true).SetFocus(settingsEditor)
+					return nil
 
-					case tcell.KeyCtrlQ:
-						app.Stop()
+				case tcell.KeyCtrlQ:
+					app.Stop()
+					return nil
+
+				case tcell.KeyCtrlJ:
+					if requestForm.HasFocus(){
+						if (requestForm.GetButton(requestForm.GetButtonCount() - 1).HasFocus()){
+							app.SetFocus(authForm.GetFormItem(0))
+						}else{
+							fII, bII := requestForm.GetFocusedItemIndex()
+							if bII == -1 && fII != requestForm.GetFormItemCount() - 1{
+								app.SetFocus(requestForm.GetFormItem(fII + 1))
+							}else if fII == -1 || fII == requestForm.GetFormItemCount() - 1{
+								app.SetFocus(requestForm.GetButton(bII + 1))
+							}
+						}
+					} else if authForm.HasFocus(){
+						if (authForm.GetButton(authForm.GetButtonCount() - 1).HasFocus()){
+							app.SetFocus(headersForm.GetButton(0))
+						}else{
+							fII, bII := authForm.GetFocusedItemIndex()
+							if bII == -1 && fII != authForm.GetFormItemCount() - 1{
+								app.SetFocus(authForm.GetFormItem(fII + 1))
+							}else if fII == -1 || fII == authForm.GetFormItemCount() - 1{
+								app.SetFocus(authForm.GetButton(bII + 1))
+							}
+						}
+					} else if headersForm.HasFocus(){
+						fII, bII := headersForm.GetFocusedItemIndex()
+						if (headersForm.GetButton(headersForm.GetButtonCount() - 1).HasFocus()){
+							app.SetFocus(requestForm.GetFormItem(0))
+						}else if fII == -1 || bII != headersForm.GetFormItemCount() - 1{
+							app.SetFocus(headersForm.GetButton(bII+1))
+						}
+					} else if statusView.HasFocus(){
+						app.SetFocus(responseView)
+					} else if responseView.HasFocus(){
+						app.SetFocus(statusView)
+					}
+					return nil
+				
+				case tcell.KeyCtrlK:
+					if headersForm.HasFocus(){
+						fII, bII := headersForm.GetFocusedItemIndex()
+						if headersForm.GetButton(0).HasFocus(){
+							app.SetFocus(authForm.GetButton(authForm.GetButtonCount() - 1))
+						}else if fII == -1 || bII != 0{
+							app.SetFocus(headersForm.GetButton(bII-1))
+						}
+					} else if authForm.HasFocus(){
+						fII, bII := authForm.GetFocusedItemIndex()
+						if authForm.GetFormItem(0).HasFocus(){
+							app.SetFocus(requestForm.GetButton(requestForm.GetButtonCount() - 1))
+						}else if bII == 0 {
+							app.SetFocus(authForm.GetFormItem(authForm.GetFormItemCount() - 1))
+						}else if fII == -1 {
+							app.SetFocus(authForm.GetButton(bII - 1))
+						} else if bII == -1 && fII != 0 || fII != -1 {
+							app.SetFocus(authForm.GetFormItem(fII - 1))
+						}
+					} else if requestForm.HasFocus(){
+						fII, bII := requestForm.GetFocusedItemIndex()
+						if requestForm.GetFormItem(0).HasFocus(){
+							app.SetFocus(headersForm.GetButton(headersForm.GetButtonCount() - 1))
+						}else if bII == 0 {
+							app.SetFocus(requestForm.GetFormItem(requestForm.GetFormItemCount() - 1))
+						}else if fII == -1 {
+							app.SetFocus(requestForm.GetButton(bII - 1))
+						} else if bII == -1 && fII != 0 || fII != -1 {
+							app.SetFocus(requestForm.GetFormItem(fII - 1))
+						}
+					} else if statusView.HasFocus(){
+						app.SetFocus(responseView)
+					} else if responseView.HasFocus(){
+						app.SetFocus(statusView)
+					}
+
+				case tcell.KeyCtrlL:
+					if requestForm.HasFocus() || authForm.HasFocus(){
+						app.SetFocus(responseView)
 						return nil
+					}
+					if headersForm.HasFocus(){
+						app.SetFocus(statusView)
+						return nil
+					}
+					if responseView.HasFocus(){
+						app.SetFocus(requestForm.GetFormItem(0))
+						return nil
+					}
+					if statusView.HasFocus(){
+						app.SetFocus(headersForm.GetButton(0))
+						return nil
+					}
+
+				case tcell.KeyCtrlH:
+					if requestForm.HasFocus() || authForm.HasFocus(){
+						app.SetFocus(responseView)
+						return nil
+					}
+					if headersForm.HasFocus(){
+						app.SetFocus(statusView)
+						return nil
+					}
+					if responseView.HasFocus(){
+						app.SetFocus(requestForm.GetFormItem(0))
+						return nil
+					}
+					if statusView.HasFocus(){
+						app.SetFocus(authForm.GetFormItem(0))
+						return nil
+					}
 				}
 
 				return event
 			}).
-			Run();
-		err != nil {
+			Run(); err != nil {
 			panic(err)
 		}
 	}
 }
+
+// AddItem(requestForm, 0, 1, false).
+// AddItem(authForm, 20, 1, false).
+// AddItem(headersForm, 15, 1, false), 0, 1, false).
+// AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
+// 	AddItem(responseView, 0, 3, false).
+// 	AddItem(statusView, 7, 1, false), 0, 2, false).
+// AddItem(tview.NewBox().SetBorder(true), 0, 0, false)
